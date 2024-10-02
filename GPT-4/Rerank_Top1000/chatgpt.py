@@ -5,19 +5,22 @@ import pickle
 import argparse
 from difflib import get_close_matches
 
-model_name = "gpt-4-1106-preview"
+
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain', default='all', type=str,
                         help='Domain to train on')
+    parser.add_argument('--model_name', default="gpt-4-1106-preview", type=str, help="name of model on azure")
+    parser.add_argument('--input_run', required=True, help="round robin pkl file outputed by round_robin.py")
     args = parser.parse_args()
     return args
 
 
 args = parse_args()
 
+model_name = args.model_name
 
 def prompt_model(prompt, model_name):
     completion = openai.ChatCompletion.create(
@@ -33,7 +36,7 @@ queries = pickle.load(open("../../DATA/{}_queries.pkl".format(args.domain), 'rb'
 titles = pickle.load(open("../../WIKIPEDIA/wikipedia_titles.pkl", 'rb'))
 query_titles = pickle.load(open("../../DATA/{}_titles.pkl".format(args.domain), 'rb'))
 qrel = pickle.load(open("../../DATA/test_{}_qrels_human.pkl".format(args.domain), 'rb'))
-ranks = pickle.load(open("top1000.test.reranked.robin.merged.pkl", 'rb'))
+ranks = pickle.load(open(args.input_run, 'rb'))
 queries = {qid:queries[qid] for qid in qrel}
 
 answers = {}

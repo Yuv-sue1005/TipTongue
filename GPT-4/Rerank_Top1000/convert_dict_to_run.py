@@ -7,6 +7,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain', default='all', type=str,
                         help='Domain to train on')
+    parser.add_argument('--input', default='top1000.test.reranked.pkl', type=str, help='input document to convert into a run')
+    parser.add_argument('--output', required=True, type=str, help='output file')
     args = parser.parse_args()
     return args
 
@@ -21,9 +23,9 @@ titles_to_dids = {v: k for k, v in titles.items()}
 queries = pickle.load(open("../../DATA/{}_queries.pkl".format(args.domain), 'rb'))
 qrels = pickle.load(open("../../DATA/test_{}_qrels_human.pkl".format(args.domain), 'rb'))
 queries = {qid: queries[qid] for qid in qrels}
-results = pickle.load(open("top1000.test.reranked.pkl", 'rb'))
+results = pickle.load(open(args.input, 'rb'))
 
-with open('run.tsv', 'wt') as out_file:
+with open(args.output, 'wt') as out_file:
     tsv_writer = csv.writer(out_file, delimiter=' ')
 
     for qid in queries:

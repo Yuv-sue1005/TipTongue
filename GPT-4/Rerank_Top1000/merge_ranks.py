@@ -1,6 +1,6 @@
 import  pickle
 
-ranks = pickle.load(open("top1000.test.reranked.robin.pkl", 'rb'))
+ranks = pickle.load(open("top100.test.reranked.robin.pkl", 'rb'))
 
 new_ranks = {qid:[] for qid in ranks}
 
