@@ -1,9 +1,14 @@
-import openai
+from openai import AzureOpenAI
 
-openai.api_key = "" # Your key here
 import pickle
 import argparse
 from difflib import get_close_matches
+
+client = AzureOpenAI(
+    api_key="",  # Your api key here
+    api_version="2024-05-01-preview",
+    azure_endpoint = "" # Your azure end_point
+    )
 
 
 
@@ -22,14 +27,22 @@ args = parse_args()
 
 model_name = args.model_name
 
-def prompt_model(prompt, model_name):
-    completion = openai.ChatCompletion.create(
-        model=model_name,
+assistant = client.beta.assistants.create(
+    name="Re-Ranker",
+    instructions="""
+    You are a helpful assistant, and you would help improve an exsisting ranking based on the description you are given.
+    """,
+    model=model_name  # Replace this with the actual deployment name of your model
+)
+
+
+def prompt_model(prompt, model_name, assistant=assistant):
+    response = assistant.chat.create(
         messages=[
-            {"role": "user", "content": prompt},
+            {"role": "user", "content": prompt}
         ]
     )
-    return completion.choices[0].message.content
+    return response['choices'][0]['message']['content']
 
 
 queries = pickle.load(open("../../DATA/{}_queries.pkl".format(args.domain), 'rb'))
