@@ -4,11 +4,7 @@ import pickle
 import argparse
 from difflib import get_close_matches
 
-client = AzureOpenAI(
-    api_key="",  # Your api key here
-    api_version="2024-05-01-preview",
-    azure_endpoint = "" # Your azure end_point
-    )
+
 
 
 
@@ -19,11 +15,19 @@ def parse_args():
                         help='Domain to train on')
     parser.add_argument('--model_name', default="gpt-4-1106-preview", type=str, help="name of model on azure")
     parser.add_argument('--input_run', required=True, help="round robin pkl file outputed by round_robin.py")
+    parser.add_argument('--api_key', required=True, help="api key")
+    parser.add_argument("--azure_endpoint", required=True, help="azure endpoint")
     args = parser.parse_args()
     return args
 
 
 args = parse_args()
+
+client = AzureOpenAI(
+    api_key=args.api_key,  # Your api key here
+    api_version="2024-05-01-preview",
+    azure_endpoint = args.azure_endpoint # Your azure end_point
+    )
 
 model_name = args.model_name
 
