@@ -44,11 +44,10 @@ def prompt_model(prompt, model_name, assistant=assistant):
     )
     return response['choices'][0]['message']['content']
 
-
-queries = pickle.load(open("../../DATA/{}_queries.pkl".format(args.domain), 'rb'))
-titles = pickle.load(open("../../WIKIPEDIA/wikipedia_titles.pkl", 'rb'))
+queries = pickle.load(open("queries.pkl", 'rb'))
+titles = pickle.load(open("query_titles.pkl", 'rb'))
 query_titles = pickle.load(open("../../DATA/{}_titles.pkl".format(args.domain), 'rb'))
-qrel = pickle.load(open("../../DATA/test_{}_qrels_human.pkl".format(args.domain), 'rb'))
+qrel = pickle.load(open(".qrels.pkl", 'rb'))
 ranks = pickle.load(open(args.input_run, 'rb'))
 queries = {qid:queries[qid] for qid in qrel}
 

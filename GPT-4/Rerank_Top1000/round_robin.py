@@ -5,7 +5,7 @@ import os
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain', default='all', type=str, help='Domain to train on')
-    parser.add_argument('--retrieve_results', type=str, help='top 1k docs to rerank')
+    parser.add_argument('--retrieve_results', default="tot_result.pkl", type=str, help='top 1k docs to rerank')
     parser.add_argument('--outputs', type=str, help='output doc')
     args = parser.parse_args()
     return args
